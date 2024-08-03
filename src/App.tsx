@@ -4,7 +4,18 @@ const App: React.FC = () => {
   const [formData, setFormData] = useState({ field1: '', field2: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Update the formData state
+    const newFormData = { ...formData, [e.target.name]: e.target.value };
+    setFormData(newFormData);
+
+    // Send the updated form data to the Chrome extension
+    window.postMessage(
+      {
+        type: "FROM_PAGE",
+        payload: { action: 'saveFormData', data: newFormData }
+      },
+      "*"
+    );
   };
 
   const saveData = () => {
